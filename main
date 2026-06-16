@@ -1,0 +1,62 @@
+#include <iostream>
+using namespace std;
+
+class Site
+{
+public:
+    virtual void Open() = 0;
+};
+
+
+class RealSite : public Site
+{
+public:
+    void Open() override
+    {
+        cout << "Сайт открыт к вашим услугам" << endl;
+    }
+};
+
+
+class SiteProxy : public Site
+{
+private:
+    RealSite* site;
+
+public:
+    SiteProxy()
+    {
+        site = new RealSite();
+    }
+
+    void Check()
+    {
+        cout << "Проверочка..." << endl;
+    }
+
+    void Open() override
+    {
+        Check();
+        site->Open();
+        cout << "Данные записаны в лог" << endl;
+    }
+
+    ~SiteProxy()
+    {
+        delete site;
+    }
+};
+
+int main()
+{
+    setlocale(LC_ALL, "Rus");
+
+    Site* site = new SiteProxy();
+
+    site->Open();
+
+    delete site;
+
+    return 0;
+}
+```
